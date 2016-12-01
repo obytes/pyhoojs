@@ -1,7 +1,10 @@
 
 # Service location
-SERVICE_LOCATION = "http://example.com"
-REDIRECT_URL = SERVICE_LOCATION
+# SERVICE_LOCATION = "local.paribus.co"
+SERVICE_LOCATION = "http://local.paribus.co"
+SERVICE_PORT = 8000
+# REDIRECT_URL = SERVICE_LOCATION
+REDIRECT_URL = "{}:{}".format(SERVICE_LOCATION, SERVICE_PORT)
 # YAHOO application
 # Client ID (Consumer Key)
 CLIENT_ID=""

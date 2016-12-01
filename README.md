@@ -2,6 +2,13 @@
 Python program that uses, webdriver to read from a table with username and passwords, and retrieve `access  &amp; refresh tokens`
 
 
+# feature
+
+ * [x] Ignore print, move them to logger
+ * [ ] Refactor exception handling on PhantomJS page load
+ * [x] Make sure `yahoo mail is present` when granting access (permission filter, when loading authorization_code)
+ * [x] Test `rake test`
+ * [ ] Dockerize tests
 
 
 # usage
@@ -10,42 +17,35 @@ Python program that uses, webdriver to read from a table with username and passw
  2. fill with you credentials
  3. install requirements ...
  4. run
-```
-rake run
-
-
-x@x:pyhoojs$ rake run
-python pyhoojs.py
-
-https://api.login.yahoo.com/oauth2/request_auth?language=en-us&redirect_uri=oob&response_type=code&client_id=dj0yJmk9NjNDNWw0MzlLV21zJmQ9WVdrOWRHaFhORWd4TnpJbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Nw--
-ypjh3zv
-
-{u'access_token': u'HWmCFguev1FFJG3X.fiXHOoRtAG20O_S1qNpkuAoLAVBgDtP_tWZpDSgCVZZLkXx2zG0kYpohdGskWmDQ2269CLz65MNqzemXA24uBIbfJKZboHKHYS57QyzDCNXauRQSH9xyBsRmT5LdUOCw94UrNgd10tI9sUqW5z18Ee1aYAfsIB9nNjlx934EYzpLDfClB7KU7TixJvXalNiXzJt2R65zga9arFGMkbMo8Zml4FVRY9bcxX.7evs58NFraQ9y4AMHqv7stOfi2QZXxWzab4Dx7Czy8_W1QFMYVjplkunXDk_PrRqWYNUCjqKKA52P3EQuWgVaMM81w0jXspZFPCCqCiiiT.ZCkXOuUWVNgWALNGU.naG5uMEON2I.oBX2lZVRQgajpDcOdTbafCHfvq97IYFCpln2ikCNkvm5vCgNV3wNX9YHHopm3DACKOsbYcUyGkib8kNU2xQwcPRYc26mE7popenRApyCra.sI.anupFPt1auR_YXun6GD2thFQKaMacH4VdFpRT9G73mY5TBNiLbkoMGKl9T8f_2HlkFryijN9xB0OGMkk1tfNjpmMVCNi8uIlwtM6KtNyc_.A9cPpdCBSD3MQu405pU4YEr4htzVt.STYnDQ_mXtpiBicEHrgQrNvXxUT1aeSuJdYfIOrrISQkaU2XBbyTrC0PN8zIgIC45X2euaN3s31h5tZ15IM7AHFUbYi5Z8LN0VvpMd8nDOJQTxcORl0ZutpuKdgOhXXVpPAR9IbeaSGjrJkpwwobKKh2N6U6Ki59ypONyfqVLLiQ0DI9Haa6GE8Xoi9k32lhj.GSRhRR0qK3ke7tcw6t6U6dwLcB0JzjvvPrN.8OymdhNSeXJ.iwX8tivmEnV1nDWh8xeb_YFjqMW_S_zl1o46IITnEG8V_BLGAv0uNS6.ka_cDCR8CRekfGiI10YsxEAAUm.Cr_RAwHiFavqzUXcpoenDfVw3_bOVx926WnRNmZcvgOAhLoTrQiGw0as587X4C7',
- u'expires_in': 3600,
- u'refresh_token': u'AMbkP1jDtCHnNdw3lr4b9C1DI7iCcvOWPW6IRaIwyg0I9YuXon0f',
- u'token_type': u'bearer',
- u'xoauth_yahoo_guid': u'PP73UFM7LPCI4SK75SJMELNZ5A'}
-
-{u'access_token': u'nEQiM1eev1HP9qpl5kRMRbWVjGSqcBRDyvV_Bj9adUSDoD0mgVxvS..t86RKUpVtSpDgypfSMH1Pl.w34Jek5I0SL8BHXRgeoGRcHSe7pkEFrT_aqBFOc_4QV_z1iituKSqt6263._PAVtN6kQEfQeeR3HlwDCCqTatRSVHqw5Kt1BLUKJ8XafQrr32kndF48rvkH0QMyZ3clTK9Ttjo6ukgjUqOrZqdIhaNiEpPVHnbz9IPEJ9mtZlqyhS_G1AKpY4nClhobIjq3BcZT4nHiMqNa_0TALsDgYBLXsVUoeZfMl0yFhVEuY0sLL0aBFnQ9yAWb2r33HT0wbPRwUXY2DtIN28_BfDRL7z.NMnAlEFYLm3WxqKmjMIn_4WSa1CDcWPeyiJbrapIr6YFdVBhCP1SQE1sQy6zAl61yHZSW9_Jm.LnyKGgHOvRWuRsfYuV1xBN9rKX2VwexfO5mIwpQBwzYDdDYNbGKyz6vBRYXoEiAnmmf6m_dloLbSEfxyleptQXSVNtgPwRZ0L2AAWW8mnHmuuowTjGlJCfx2P3.3aonxdedm0zgpTPVKGsfR_j2_YKBkxrtlE4jTyMaNEAp1RIjz5Hi5LEmQQcJY_hsZCrTSA.sZvJiuTrzlmJPs0BuExejDIMPn17RjD7L7qnZX53alQi9uYqCTcUgt4_SLQ2HBB5DlOQQ58TfTws__uk2BlaHBUrnxH8.VF1ccdm9S3ehx5o4eYiUbtMB7gRGEwDmwenfXg7V.kcz1YcLZkBPMLXU4LI39OPGRlIL_ENU5mmGx7V34GDOp7ihYwuD3zcRHEsSBoIbtK_l9TeHyXAi4J9rkztvPfGWrc6RjozXZ5l0o4dGzSy4NaPW3zNzcoBUsMZWw2jWJDcgOx7x.2hHteEAisRZL2CpVYYi7t6r3Qt47eUPuMoK6GYMDO4R.zFepmjPlCP9S_hF2D3RKaMi0cs6rF0qHrKaCdMIJFqkr4JPpk264VWgYk73AUj3ILuXCg_0p8U6q9t',
- u'expires_in': 3600,
- u'refresh_token': u'AMbkP1jDtCHnNdw3lr4b9C1DI7iCcvOWPW6IRaIwyg0I9YuXon0f',
- u'token_type': u'bearer',
- u'xoauth_yahoo_guid': u'PP73UFM7LPCI4SK75SJMELNZ5A'}
 
 ```
+# fill your secrets
+from secret import *
+from pyhoojs import Pyhoojs
+
+client = Pyhoojs(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri="oob")
+client.set_authorization_url()
+session_token = client.get_session_token(email=YAHOO_EMAIL, password=YAHOO_PASS)
+
+session_token
+"""
+{
+u'access_token': u'iPUd46Wev1G2odQrMFnKz.kAduwjVa_yGUgg71Ce239SRdoVg.q3YV01QpZoHQAY_t6wtttilClLlndYlIl.f.5c_wwHKtaC2z7_Qc1GoILXC.1t3z_3xzpsNsnbW4q6FVqg8Hm10OAyIi48QyRhKEYFRi5c6NuUW0y6YsZMQOKZAq.IEE_HpxQ6CKqF7nN.Jt1zM14ZMkcl3MdRZx0.EKhwo0QaF8D_bY_Vk97f3EpfMykYxMkQu__bKi_zo_8ZNpGqcjT_H7Q1LxspflTq6evsjQpYm3odKRiGNK4qAv4kf56FSuKQBD1tcO5Wb5B5TzE3EuywkC1jkv_HLbRTmQwdEW14IxYqO.IcbSNW4X2yaLYn3hz4unX0DHori6nra7DM.6Q6oIHCroXqYEYYYOXT5oW2N9MXnae3ej9Q7v_JtUbLA1Qn77gIwOXZ0larujQgY3ytbplb7Z0ajrjEyI7Zs.7lM936Hed8yw.CiIKYiREEuqpFTxoTectq6j9quylnqHp9kk5QdT5j2KDd60WtCWhVPKIcor0CbGtgY2OP4ExUCxkFuxvdxiJAUCJ.43rmzthnLTQQ40ZnfiXaptsIhtWBtLhbPbn88cuE93CUQ1mW.WTiCf6BdMicWNIQj3t5Q6Jrm9nv3Bv98M6Nh7uyj2AHLpOQ1TJ_kT4e8gigKaupq5d2250FNuW.LSrFuVnSHSQ6Gv9tblukWbtIihCcth7cZjbHSFKfZASYZG7Z8WvZKlc91qmxASYaQmkesLsQX6TMhmX_ZLDNwjWXYxnTbgBwtgbC_TQSPHkfVxIFfRo5LXexQEB3eSrzroCbVcNLtLwNNkNaz8ewT4h78GqgBF4nN3n1m8RVbgZz65X2HfqO0KfCKdwtF5jfeWGokio.nMvbDhKEHnJz4WWc_a.SDbrDQVlc9RIdovd32nGd4f1cwlHwu_36O02vQZa54XS8dhsicKSzAAaKF9zX3lsGF2A.7Kv5VGJu.7d5MFRdomM3Y3KwanEY', 
+u'token_type': u'bearer', 
+u'expires_in': 3600, 
+u'xoauth_yahoo_guid': u'PP73UFM7LPCI4SK75SJMELNZ5A', 
+u'refresh_token': u'AF5FQFj0NRHJ_qSAjN0zgyDsqC7ynMbW_KZFgkGdO0u_wcS4UeZd'
+}
+"""
+client.authorization_url
+"""
+'https://api.login.yahoo.com/oauth2/request_auth?language=en-us&redirect_uri=oob&response_type=code&client_id=dj0yJmk9NWlSb3VXbDlZTWFYJmQ9WVdrOVJrMXZlakpPTlRBbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00NA--'
+"""
 
 
 
-
-
-
-# feature
-
- * [x] Ignore print, move them to logger
- * [ ] Refactor exception handling on PhantomJS page load
- * [x] Make sure `yahoo mail is present` when granting access (permission filter, when loading authorization_code)
- * [x] Integration test with contextio
- * [ ] Dockerize tests
+```
+ 
 
 
 # requirements

@@ -5,12 +5,8 @@ task :hw do
 end
 
 
-task :run do
-  sh "python pyhoojs.py"
-end
-
 task :test do
-  sh "pytest"
+  sh "PYTHONPATH=. pytest"
 end
 
 task :clean_pyc do

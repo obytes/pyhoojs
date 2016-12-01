@@ -1,0 +1,5 @@
+-r base.txt
+
+contextio==1.11.2
+rauth==0.7.2
+six==1.10.0

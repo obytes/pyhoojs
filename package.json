@@ -1,0 +1,23 @@
+{
+  "name": "pyhoojs",
+  "version": "1.0.0",
+  "description": "Python program that uses, webdriver to read from a table with username and passwords, and retrieve `access  &amp; refresh tokens`",
+  "main": "yahoo_form.js",
+  "dependencies": {
+    "phantomjs-prebuilt": "^2.1.13"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/2XL/pyhoojs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/2XL/pyhoojs/issues"
+  },
+  "homepage": "https://github.com/2XL/pyhoojs#readme"
+}

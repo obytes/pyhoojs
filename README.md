@@ -2,8 +2,16 @@
 Python program that uses, webdriver to read from a table with username and passwords, and retrieve `access  &amp; refresh tokens`
 
 
-Seems like I have to provision it with a local web server
 
+# usage
+
+1. rename secret.example.py into secret.py
+2. fill with you credentials
+3. install requirements ...
+4. run
+```
+python pyhoojs.py
+```
 
 
 
@@ -12,7 +20,7 @@ Seems like I have to provision it with a local web server
 
 # feature
 
- [ ] Ignore print, move them to logger
+ [x] Ignore print, move them to logger
  [ ] Refactor exception handling on PhantomJS page load
  [ ] 
 
@@ -28,7 +36,6 @@ npm install -g phantomjs-prebuilt
 
 # testing && developing with gui webkit
 
-[webdrivers](https://chromedriver.storage.googleapis.com/index.html?path=2.25/)
 
 ```
 wget https://chromedriver.storage.googleapis.com/2.25/chromedriver_linux64.zip
@@ -38,9 +45,11 @@ chromedriver
 
 ```
 
-[diagram](https://s.yimg.com/oo/cms/products/oauth2/flows_authcode/images/yahoo_auth_flow_04974dd18.png)
 
 # resources
 
-https://realpython.com/blog/python/headless-selenium-testing-with-python-and-phantomjs/
-https://developer.yahoo.com/oauth2/guide/
+[selenium + phantomjs](https://realpython.com/blog/python/headless-selenium-testing-with-python-and-phantomjs/)
+[yahoo-oauth guide](https://developer.yahoo.com/oauth2/guide/)
+[oauth flow diagram](https://s.yimg.com/oo/cms/products/oauth2/flows_authcode/images/yahoo_auth_flow_04974dd18.png)
+[webdrivers](https://chromedriver.storage.googleapis.com/index.html?path=2.25/)
+

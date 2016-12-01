@@ -36,10 +36,11 @@ logger.info('Start reading database {}'.format("pyhoojs"))
 
 
 class Pyhoojs(object):
-    def __init__(self, client_id, client_secret, redirect_uri):
+    def __init__(self, client_id, client_secret, redirect_uri, driver="phantomjs"):
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
+        self.driver = driver
         pass
 
     def get_authorization_url(self, client_id=None, redirect_uri="oob", response_type="code", state=None,
@@ -104,16 +105,19 @@ class Pyhoojs(object):
         login = username
         passwd = password
 
-        user_agent = (
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) " +
-            "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36"
-        )
+        if self.driver == "phantomjs":
+            user_agent = (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_4) " +
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1547.57 Safari/537.36"
+            )
 
-        dcap = dict(DesiredCapabilities.PHANTOMJS)
-        dcap["phantomjs.page.settings.userAgent"] = user_agent
+            dcap = dict(DesiredCapabilities.PHANTOMJS)
+            dcap["phantomjs.page.settings.userAgent"] = user_agent
 
-        # driver = webdriver.Chrome()
-        driver = webdriver.PhantomJS(desired_capabilities=dcap, service_args=['--ignore-ssl-errors=true'])
+            driver = webdriver.PhantomJS(desired_capabilities=dcap, service_args=['--ignore-ssl-errors=true'])
+        else:
+            driver = webdriver.Chrome()
+
         driver.get(auth_url)
 
         try:
@@ -330,9 +334,6 @@ if __name__ == "__main__":
     pprint(session_tokens)
     session_tokens_refreshed = client.exchange_refresh_token(refresh_token=session_tokens['refresh_token'])
     pprint(session_tokens_refreshed)
-
-
-
 
     # print url.request.boxy
     # https://api.login.yahoo.com/oauth2/request_auth?client_id=dj0yJmk9ak5IZ2x5WmNsaHp6JmQ9WVdrOVNqQkJUMnRYTjJrbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hYQ--&redirect_uri=oob&response_type=code&language=en-us

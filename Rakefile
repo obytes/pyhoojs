@@ -13,8 +13,6 @@ task :test do
   sh "pytest"
 end
 
-
-
 task :clean_pyc do
   sh "rm *.pyc -rf"
   sh "rm tests/*.pyc -rf"

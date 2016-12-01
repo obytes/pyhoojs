@@ -43,7 +43,7 @@ ypjh3zv
 
  * [x] Ignore print, move them to logger
  * [ ] Refactor exception handling on PhantomJS page load
- * [ ] Make sure `yahoo messenger is present` when granting access 
+ * [x] Make sure `yahoo mail is present` when granting access (permission filter, when loading authorization_code)
  * [x] Integration test with contextio
  * [ ] Dockerize tests
 
@@ -53,7 +53,10 @@ ypjh3zv
 ```
 pip install -r requirements.txt
 
-npm install -g phantomjs-prebuilt
+npm install # -g phantomjs-prebuilt 
+
+# append add the phantomjs-prebuilt to your $PYTHONPATH
+./node_modules/phantomjs-prebuilt/bin/phantomjs
 ```
 
 

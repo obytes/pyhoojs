@@ -11,5 +11,5 @@ screenshot
 !.placeholder
 *.pyc
 .cache
-
+main.py
 secret.py

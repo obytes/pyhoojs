@@ -129,14 +129,14 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
         # except:
         #     pass
 
-    def load_authorization_code(self, username, password, auth_url=None, timeout=3, required_permission_list={}):
+    def load_authorization_code(self, username, password, auth_url=None, timeout=3, permission_list={}):
         """
         
         :param username: yahoo email
         :param password: yahoo password
         :param auth_url: yahoo auth url
         :param timeout: wait page load timeout
-        :param required_permission_list: a list of required permissions
+        :param permission_list: a list of required permissions
         :return: 
         """
         self.authorization_code = None
@@ -221,9 +221,15 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
                         value = permission.find_element_by_class_name("oauth2-scope-allow").get_attribute(
                             "innerHTML").lower().replace(' ', '_')
                         required_permission_list[key] = value
-                    print required_permission_list
-                    import pdb;
-                    pdb.set_trace()
+
+                    for key, value in permission_list:
+                        if key in required_permission_list:
+                            if required_permission_list[key] == value:
+                                continue
+                            else:
+                                logger.warn("Permission value not match for [{}] {} vs {}".format(key, required_permission_list[key], value))
+                        else:
+                            logger.error("Permission not found for [{}]".format(key))
                     oauth_agree.click()
                     break
                 except NoSuchWindowException as ex:

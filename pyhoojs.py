@@ -47,7 +47,7 @@ class ExchangeAuthorizationCodeHandler(BaseHTTPRequestHandler):
                 self.wfile.write(value)
 
 
-class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
+class Pyhoojs(ExchangeAuthorizationCodeHandler):
     def __init__(self, client_id, client_secret, service_location=None, service_port=None, redirect_uri="oob",
                  driver="phantomjs"):
         self.client_id = client_id
@@ -77,16 +77,7 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
         Use the Consumer Key we provide as the client_id to request a redirect URL.
         Also include the redirect_url so that Yahoo knows where to redirect users
         after they authorize access to their data.
-            {
-            u'relationships': u'read/write_public/private',
-            u'yahoo_messenger': u'read_and_write',
-            u'gemini_advertising': u'read_and_write',
-            u'profiles': u'read_public',
-            u'yahoo_fantasy_sports': u'read',
-            u'yahoo_contacts': u'read'
-            }
-
-
+        
             example:
                 https://api.login.yahoo.com/oauth2/request_auth?
             client_id=dj0yJmk9ak5IZ2x5WmNsaHp6JmQ9WVdrOVNqQkJUMnRYTjJrbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hYQ--&
@@ -131,7 +122,15 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
 
     def load_authorization_code(self, username, password, auth_url=None, timeout=3, permission_list={}):
         """
-        
+            example permission list:
+            {
+            u'relationships': u'read/write_public/private',
+            u'yahoo_messenger': u'read_and_write',
+            u'gemini_advertising': u'read_and_write',
+            u'profiles': u'read_public',
+            u'yahoo_fantasy_sports': u'read',
+            u'yahoo_contacts': u'read'
+            }
         :param username: yahoo email
         :param password: yahoo password
         :param auth_url: yahoo auth url
@@ -241,7 +240,6 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
                     logger.error("{},{}".format("oauth_agree", ex))
                     pass
             pass
-        # // *[ @ id = "Stencil"] / body / div[1] / div[2] / div / div / div / div[1] / code
         if self.redirect_uri == "oob":  # handle within the same request
             try:
                 WebDriverWait(driver, timeout).until(
@@ -323,7 +321,7 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
         authorization = 'Basic %s' % (base64.b64encode(credentials),)
 
         header = {
-            "Authorization": "Basic {}".format(authorization),
+            "Authorization": authorization,
             "Content-Type": "application/x-www-form-urlencoded"
         }
 
@@ -405,7 +403,3 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler, ):
                 raise TimeoutException
         self.exchange_authorization_code(code=self.authorization_code)
         return self.session_token
-
-# print url.request.boxy
-# https://api.login.yahoo.com/oauth2/request_auth?client_id=dj0yJmk9ak5IZ2x5WmNsaHp6JmQ9WVdrOVNqQkJUMnRYTjJrbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hYQ--&redirect_uri=oob&response_type=code&language=en-us
-# https://api.login.yahoo.com/oauth2/request_auth/redirect_uri=oob&response_type=code&client_id=dj0yJmk9NjNDNWw0MzlLV21zJmQ9WVdrOWRHaFhORWd4TnpJbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Nw--

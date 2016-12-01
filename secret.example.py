@@ -7,13 +7,14 @@ SERVICE_PORT = 8000
 REDIRECT_URL = "{}:{}".format(SERVICE_LOCATION, SERVICE_PORT)
 # YAHOO application
 # Client ID (Consumer Key)
-CLIENT_ID=""
+CLIENT_ID = ""
 # Client Secret (Consumer Secret)
-CLIENT_SECRET=""
+CLIENT_SECRET = ""
 
 # CONTEXT.IO
 CONTEXTIO_KEY = ""
 CONTEXTIO_SECRET = ""
+CONTEXTIO_EMAIL_ID = "583fe329e9a4861d718b456a"
 CONTEXTIO_EMAIL = "chenglong.zq@yahoo.com"
 
 # YAHOO test client

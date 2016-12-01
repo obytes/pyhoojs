@@ -70,7 +70,7 @@ chromedriver
 
 # issues
 
-
+ * If redirects are not to 80/443 app api (credentials instead of page) 
  * Bind yahoo mail with context.io && [allow yahoo connection from none secure source](https://login.yahoo.com/account/security) 
 
 

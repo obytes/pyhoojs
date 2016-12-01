@@ -1,7 +1,12 @@
+import SimpleHTTPServer
+import SocketServer
 import base64
 import csv
 import time
-from pprint import pprint
+import threading
+import urlparse
+from BaseHTTPServer import BaseHTTPRequestHandler
+
 import requests
 from selenium import webdriver
 from selenium.common.exceptions import ElementNotVisibleException, StaleElementReferenceException, \
@@ -31,19 +36,18 @@ handler.setFormatter(formatter)
 # add the handlers to the logger
 logger.addHandler(handler)
 
-
 logger.info('Start reading database {}'.format("pyhoojs"))
 
 
 class Pyhoojs(object):
-    def __init__(self, client_id, client_secret, redirect_uri, driver="phantomjs"):
+    def __init__(self, client_id, client_secret, redirect_uri="oob", driver="phantomjs"):
         self.client_id = client_id
         self.client_secret = client_secret
         self.redirect_uri = redirect_uri
         self.driver = driver
         pass
 
-    def get_authorization_url(self, client_id=None, redirect_uri="oob", response_type="code", state=None,
+    def get_authorization_url(self, client_id=None, redirect_uri=None, response_type="code", state=None,
                               language="en-us"):
         """
         Use the Consumer Key we provide as the client_id to request a redirect URL.
@@ -162,8 +166,12 @@ class Pyhoojs(object):
             while True:
                 try:
                     oauth_agree = driver.find_element_by_id("oauth2-agree")
-                    oauth_agree.click()
-                    break
+                    # before clicking make sure
+                    # Yahoo mail permissions are granted
+                    if driver.find_element_by_class_name("oauth2-scope-name").get_attribute(
+                            "innerHTML") == u'Yahoo Mail':
+                        oauth_agree.click()
+                        break
                 except (NoSuchElementException, InvalidElementStateException, ElementNotVisibleException,
                         StaleElementReferenceException) as ex:
                     time.sleep(1)
@@ -171,37 +179,35 @@ class Pyhoojs(object):
                     pass
             pass
         # // *[ @ id = "Stencil"] / body / div[1] / div[2] / div / div / div / div[1] / code
-        try: 
-            WebDriverWait(driver, timeout).until(
-                EC.presence_of_element_located((By.XPATH, "//code[@class='oauth2-code']"))
-            )
-        finally:
-            iter = 0
-            while True:
-                iter += 1
-                try:
-                    logger.info("{}, try {}".format("get_oauth_code", iter))
-                    oauth_code = driver.find_element_by_xpath("//code[@class='oauth2-code']")
-                    oauth = oauth_code.get_attribute("innerHTML")
-                    logger.info("{}: {}".format("oauth_code", oauth_code))
+        if self.redirect_uri == "oob":
+            try:
+                WebDriverWait(driver, timeout).until(
+                    EC.presence_of_element_located((By.XPATH, "//code[@class='oauth2-code']"))
+                )
+            finally:
+                iter = 0
+                while True:
+                    iter += 1
+                    try:
+                        logger.info("{}, try {}".format("get_oauth_code", iter))
+                        oauth_code = driver.find_element_by_xpath("//code[@class='oauth2-code']")
+                        oauth = oauth_code.get_attribute("innerHTML")
+                        logger.info("{}: {}".format("oauth_code", oauth_code))
 
-                    oauth_close = driver.find_element_by_id("oauth2-close")
-                    oauth_close.click()
-                    break
-                except (NoSuchElementException, InvalidElementStateException, ElementNotVisibleException,
-                        StaleElementReferenceException) as ex:
-                    time.sleep(1)
-                    logger.error("{},{}".format("oauth_code", ex))
-                    driver.save_screenshot('screenshot/{}_{}.png'.format(int(time.time()), "oauth_code"))
-                    pass
+                        oauth_close = driver.find_element_by_id("oauth2-close")
+                        oauth_close.click()
+                        break
+                    except (NoSuchElementException, InvalidElementStateException, ElementNotVisibleException,
+                            StaleElementReferenceException) as ex:
+                        time.sleep(1)
+                        logger.error("{},{}".format("oauth_code", ex))
+                        driver.save_screenshot('screenshot/{}_{}.png'.format(int(time.time()), "oauth_code"))
+                        pass
         try:
-
             driver.close()
-        except NoSuchWindowException as ex: 
+        except NoSuchWindowException as ex:
             logger.error("{},{}".format("driver_close", ex))
             pass
-        finally:
-            return oauth
 
     def exchange_authorization_code(self, code, client_id=None, client_secret=None, redirect_uri=None,
                                     grant_type="authorization_code"):
@@ -256,12 +262,13 @@ class Pyhoojs(object):
         }
 
         get_token_url = "https://api.login.yahoo.com/oauth2/get_token"
-        
+
         response = requests.post(url=get_token_url, data=payload, headers=header)
         assert response.status_code == 200
         return response.json()
 
-    def exchange_refresh_token(self, refresh_token, client_id=None, client_secret=None, redirect_uri=None, grant_type="refresh_token"):
+    def exchange_refresh_token(self, refresh_token, client_id=None, client_secret=None, redirect_uri=None,
+                               grant_type="refresh_token"):
         """
         POST: https://api.login.yahoo.com/oauth2/get_token
         After the access token expires, you can use the refresh token, which has a long lifetime, to get a new access token.
@@ -299,7 +306,7 @@ class Pyhoojs(object):
             payload['grant_type'] = grant_type
         if refresh_token is not None:
             payload['refresh_token'] = refresh_token
-            
+
         credentials = '%s:%s' % (self.client_id, self.client_secret)
         authorization = 'Basic %s' % (base64.b64encode(credentials),)
 
@@ -315,7 +322,49 @@ class Pyhoojs(object):
         return response.json()
         pass
 
+
+def write_to_file(file_name, json_data):
+    import json
+    with open(file_name, 'w') as outfile:
+        json.dump(json_data, outfile)
+
+
+class ExchangeAuthorizationCodeHandler(BaseHTTPRequestHandler):
+
+    def do_GET(self):
+        parsed_path = urlparse.urlparse(self.path)
+        for key, value in urlparse.parse_qsl(parsed_path.query):
+            if key == "code":
+                client = Pyhoojs(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URL, driver="other")
+                session_token = client.exchange_authorization_code(code=value)
+                print session_token
+                write_to_file(file_name="session_token.json", json_data=session_token)
+                message = '\r\n'.join(session_token)
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(message)
+        return
+
+    pass
+
+
 if __name__ == "__main__":
+
+    # setup simpleHTTP server
+    Handler = ExchangeAuthorizationCodeHandler
+    server_address = (SERVICE_LOCATION, SERVICE_PORT)
+    try:
+        httpd = SocketServer.TCPServer(server_address=server_address, RequestHandlerClass=Handler)
+        thread = threading.Thread(target=httpd.serve_forever)
+        thread.daemon = True
+    except Exception as ex:
+        print ex.message
+        thread.join()
+        exit(1)
+
+    thread.start()
+
+    print "serving at port", server_address
 
     with open('input.csv') as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
@@ -323,17 +372,13 @@ if __name__ == "__main__":
         for row in reader:
             # print row['username'] + ":" + row['password']
             pass
-
-    client = Pyhoojs(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URL)
+    client = Pyhoojs(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URL, driver="other")
     auth_url = client.get_authorization_url()
     print auth_url
 
-    oauth_code = client.grant_authorization(username=YAHOO_EMAIL, password=YAHOO_PASS, auth_url=auth_url)
-    print oauth_code
-    session_tokens = client.exchange_authorization_code(code=oauth_code)
-    pprint(session_tokens)
-    session_tokens_refreshed = client.exchange_refresh_token(refresh_token=session_tokens['refresh_token'])
-    pprint(session_tokens_refreshed)
+    client.grant_authorization(username=YAHOO_EMAIL, password=YAHOO_PASS, auth_url=auth_url)
+
+
 
     # print url.request.boxy
     # https://api.login.yahoo.com/oauth2/request_auth?client_id=dj0yJmk9ak5IZ2x5WmNsaHp6JmQ9WVdrOVNqQkJUMnRYTjJrbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hYQ--&redirect_uri=oob&response_type=code&language=en-us

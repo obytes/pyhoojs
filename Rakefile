@@ -10,30 +10,29 @@ task :run do
 end
 
 task :test do
-  sh "python pyhoojs.py"
+  sh "pytest"
 end
 
 
 
-task :turn_off_alarm do
-  puts "Turned off alarm. Would have liked 5 more minutes, though."
+task :clean_pyc do
+  sh "rm *.pyc -rf"
+  sh "rm tests/*.pyc -rf"
 end
 
-task :groom_myself do
-  puts "Brushed teeth."
-  puts "Showered."
-  puts "Shaved."
+task :clean_screenshots do
+  sh "rm screenshot/*.png -rf"
 end
 
-task :make_coffee do
-  cups = ENV["COFFEE_CUPS"] || 2
-  puts "Made #{cups} cups of coffee. Shakes are gone."
+task :clean_cache do
+  sh "rm .cache/* -rf"
 end
 
-task :walk_dog do
-  puts "Dog walked."
+task :clean_logs do
+  sh "rm *.log -rf"
+  sh "rm .firefox.log -rf"
 end
 
-task :ready_for_the_day => [:turn_off_alarm, :groom_myself, :make_coffee, :walk_dog] do
+task :clean => [:clean_pyc, :clean_screenshots, :clean_cache, :clean_logs] do
   puts "Ready for the day!"
 end

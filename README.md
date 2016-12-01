@@ -10,7 +10,7 @@ Python program that uses, webdriver to read from a table with username and passw
 3. install requirements ...
 4. run
 ```
-python pyhoojs.py
+rake run
 ```
 
 
@@ -22,7 +22,8 @@ python pyhoojs.py
 
  [x] Ignore print, move them to logger
  [ ] Refactor exception handling on PhantomJS page load
- [ ] 
+ [x] Integration test with contextio
+ [ ] Dockerize tests
 
 
 # requirements
@@ -52,4 +53,5 @@ chromedriver
 [yahoo-oauth guide](https://developer.yahoo.com/oauth2/guide/)
 [oauth flow diagram](https://s.yimg.com/oo/cms/products/oauth2/flows_authcode/images/yahoo_auth_flow_04974dd18.png)
 [webdrivers](https://chromedriver.storage.googleapis.com/index.html?path=2.25/)
+[contex.io](http://blog.context.io/2015/07/adding-a-user-with-context-io/)
 

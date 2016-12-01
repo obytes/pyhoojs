@@ -9,6 +9,7 @@ chromedriver
 node_modules
 screenshot
 !.placeholder
-
+*.pyc
+.cache
 
 secret.py

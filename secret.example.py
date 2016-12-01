@@ -11,6 +11,7 @@ CLIENT_SECRET=""
 # CONTEXT.IO
 CONTEXTIO_KEY = ""
 CONTEXTIO_SECRET = ""
+CONTEXTIO_EMAIL = "chenglong.zq@yahoo.com"
 
 # YAHOO test client
 YAHOO_EMAIL = "chenglong.zq@yahoo.com"

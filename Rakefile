@@ -1,3 +1,20 @@
+
+
+task :hw do
+  sh "echo 'Hello World!'"
+end
+
+
+task :run do
+  sh "python pyhoojs.py"
+end
+
+task :test do
+  sh "python pyhoojs.py"
+end
+
+
+
 task :turn_off_alarm do
   puts "Turned off alarm. Would have liked 5 more minutes, though."
 end

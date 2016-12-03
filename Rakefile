@@ -6,7 +6,6 @@ end
 
 
 task :test do
-  sh "PATH=node_modules//bin:$PATH"
   sh "PYTHONPATH=. py.test -s "
 end
 

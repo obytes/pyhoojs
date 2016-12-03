@@ -20,6 +20,9 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+# phantomjs PATH
+PHANTOM_JS_PATH = "node_modules/phantomjs-prebuilt/bin/phantomjs"
+
 # create a file handler
 handler = logging.FileHandler('pyhoojs.log')
 handler.setLevel(logging.INFO)
@@ -156,7 +159,9 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler):
             dcap = dict(DesiredCapabilities.PHANTOMJS)
             dcap["phantomjs.page.settings.userAgent"] = user_agent
 
-            driver = webdriver.PhantomJS(desired_capabilities=dcap, service_args=['--ignore-ssl-errors=true'])
+            driver = webdriver.PhantomJS(desired_capabilities=dcap,
+                                         service_args=['--ignore-ssl-errors=true'],
+                                         executable_path=PHANTOM_JS_PATH)
         else:
             driver = webdriver.Chrome()
 
@@ -403,3 +408,16 @@ class Pyhoojs(ExchangeAuthorizationCodeHandler):
                 raise TimeoutException
         self.exchange_authorization_code(code=self.authorization_code)
         return self.session_token
+
+
+def write_to_file(file_name, json_data):
+    import json
+    with open(file_name, 'w') as outfile:
+        json.dump(json_data, outfile)
+
+
+def load_users_from_csv(file_name='input.csv'):
+    import csv
+    with open(file_name) as csv_file:
+        reader = csv.DictReader(csv_file, delimiter=',')
+        return reader

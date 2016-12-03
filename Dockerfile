@@ -1,9 +1,8 @@
+#
+# Pull base image.
 
-FROM debian:latest
+FROM phusion/passenger-full
 
-MAINTAINER Mr. Chenglong <chenglong.zq@gmail.com>
-
-RUN apt-get update
 
 # copy our app to /src
 COPY . /src
@@ -11,7 +10,8 @@ COPY . /src
 WORKDIR /src
 # install app and requirements
 
-RUN cd /src; npm install; pip install -r requirements/test.txt
+RUN npm install; pip install -r requirements/test.txt
 
+#EXPOSE $PORT
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+ENTRYPOINT ["/src/entrypoint.sh"]

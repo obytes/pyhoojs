@@ -53,11 +53,8 @@ client.authorization_url
 
 ```
 pip install -r requirements/test.txt
+npm install 
 
-npm install # -g phantomjs-prebuilt 
-
-# append add the phantomjs-prebuilt to your $PYTHONPATH
-./node_modules/phantomjs-prebuilt/bin/phantomjs
 ```
 
 
@@ -71,6 +68,17 @@ unizp chromedriver_linux64.zip
 chromedriver
 
 ```
+
+
+# dev with docker
+
+```
+
+docker build -t <your-reponame>/<your-appname> <build-folder>
+docker build -t chenglongzq/pyhoojs docker 
+
+```
+
 
 # issues
 

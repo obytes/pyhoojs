@@ -13,3 +13,4 @@ screenshot
 .cache
 main.py
 !secret.py
+output/*.json

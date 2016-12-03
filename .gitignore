@@ -12,4 +12,4 @@ screenshot
 *.pyc
 .cache
 main.py
-secret.py
+!secret.py

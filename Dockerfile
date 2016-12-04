@@ -1,16 +1,12 @@
 #
 # Pull base image.
 
-FROM phusion/passenger-full
+FROM chenglongzq/pyhoojs
 
-# copy our app to /src
+###################### copy our app to /src
 COPY . /src
 
 WORKDIR /src
-# install app and requirements
-RUN apt-get update && apt-get install -y \
-    python-dev \
-    python-pip
 
 RUN pip install -r requirements/test.txt
 

@@ -8,7 +8,8 @@ Python program that uses, webdriver to read from a table with username and passw
  * [ ] Refactor exception handling on PhantomJS page load
  * [x] Make sure `yahoo mail is present` when granting access (permission filter, when loading authorization_code)
  * [x] Test `rake test`
- * [ ] Dockerize tests
+ * [x] Dockerize tests
+ * [ ] Validate test fetching emails from context.io
 
 
 # usage
@@ -47,6 +48,16 @@ client.authorization_url
 
 ```
  
+# run tests
+
+```bash
+# with docker
+git pull https://github.com/obytes/pyhoojs
+rake build --trace
+rake dtest
+# locally
+rake test
+```
 
 
 # requirements
@@ -69,15 +80,6 @@ chromedriver
 
 ```
 
-
-# dev with docker
-
-```
-
-docker build -t <your-reponame>/<your-appname> <build-folder>
-docker build -t chenglongzq/pyhoojs docker 
-
-```
 
 
 # issues

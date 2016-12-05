@@ -52,7 +52,8 @@ client.authorization_url
 
 ```bash
 # with docker
-git pull https://github.com/obytes/pyhoojs
+git clone https://github.com/obytes/pyhoojs
+cd pyhoojs
 rake build --trace
 rake dtest
 # locally
